@@ -33,26 +33,20 @@
     <div class="thumbnail">
         <div class="btn-group" style="margin-left: 10px;">
             <select name="category" class="form-control">
-                <option>Quiz Category</option>
+                <option>-- Quiz Category --</option>
                 @foreach ($dataj as $category)
                 <option class="tt" value="{{$category['id']}}">{{$category['name']}}</option>
                 @endforeach
             </select>
         </div>
         <div class="btn-group" style="margin-left: 10px;">
-            <select name="category" class="form-control">
-                <option>Quiz Type</option>
-                @foreach ($datah as $type_quiz)
-                <option class="tt" value="{{$type_quiz['id']}}">{{$type_quiz['name']}}</option>
-                @endforeach
+            <select name="quiz-type" class="form-control">
+                <option>-- Quiz Type --</option>
             </select>
         </div>
         <div class="btn-group" style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px;">
-            <select id="aba" name="category" class="form-control">
-                <option>Quiz</option>
-                @foreach ($datak as $category_quiz)
-                <option class="tt" value="{{$category_quiz['id']}}">{{$category_quiz['title']}}</option>
-                @endforeach
+            <select id="aba" name="category-quiz" class="form-control">
+                <option>-- Quiz --</option>
             </select>
         </div>
 
@@ -111,6 +105,71 @@
     var history_user;
 
     $(document).ready(function() {
+
+        $('select[name="category"]').on('change', function() {
+            var categoryId = this.value;
+            if (categoryId) {
+                $.ajax({
+                    url: '/select/data-quiz-type/' + categoryId,
+                    type: "GET",
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').css("visibility", "visible");
+                    },
+
+                    success: function(data) {
+
+                        $('select[name="quiz-type"]').empty();
+                        $('select[name="quiz-type"]').append('<option>' + "-- Quiz Type --" + '</option>');
+
+                        $.each(data, function(key, value) {
+
+                            
+                            $('select[name="quiz-type"]').append('<option value="' + value['id'] + '">' + value['Name'] + '</option>');
+                        });
+                    },
+                    complete: function() {
+                        $('#loader').css("visibility", "visible");
+                    }
+                });
+            } else {
+                $('select[name="quiz-type"]').empty();
+            }
+            console.log(categoryId);
+
+        });
+
+        $('select[name="quiz-type"]').on('change', function() {
+            var categoryTypeId = this.value;
+            if (categoryTypeId) {
+                $.ajax({
+                    url: '/select/data-quiz/' + categoryTypeId,
+                    type: "GET",
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').css("visibility", "visible");
+                    },
+
+                    success: function(data) {
+
+                        $('select[name="category-quiz"]').empty();
+                        $('select[name="category-quiz"]').append('<option>' + "-- Quiz --" + '</option>');
+
+                        $.each(data, function(key, value) {
+
+                            $('select[name="category-quiz"]').append('<option value="' + value['id'] + '">' + value['text'] + '</option>');
+                        });
+                    },
+                    complete: function() {
+                        $('#loader').css("visibility", "visible");
+                    }
+                });
+            } else {
+                $('select[name="category-quiz"]').empty();
+            }
+            console.log(categoryTypeId);
+
+        });
 
         $("#aba").on('change', function() {
             x = this.value;

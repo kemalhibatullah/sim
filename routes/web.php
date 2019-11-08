@@ -83,6 +83,8 @@ Auth::routes();
     Route::get('/data-quiz-type', 'QuizTypeController@getSelect');
     Route::get('/data-quiz', 'QuizController@getSelect');
     Route::get('/data-quiz-category/{id}', 'QuizCategoryController@getPreSelect');
+    Route::get('/data-quiz-type/{id}', 'QuizTypeController@getPreSelect');
+    Route::get('/data-quiz/{id}', 'QuizController@getPreSelect');
   });
 
   Route::group(['middleware' => ['role:admin'],'prefix' => '/search'], function () {

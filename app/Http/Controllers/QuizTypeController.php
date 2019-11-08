@@ -195,6 +195,19 @@ class QuizTypeController extends Controller
       return response()->json($list);
   }
 
+  public function getPreSelect(Request $request, $id)
+  {
+    $data = QuizType::select('id', 'quiz_category_id', 'name')->where('quiz_category_id',$id)->get();
+    $list = [];
+      foreach ($data as $key => $value) {
+          $list[] = [
+              'id'=>$value->id,
+              'Name'=>$value->name
+          ];
+      }
+      return response()->json($list);
+  }
+
   /*START OF API*/
 
   function api_index($id){
