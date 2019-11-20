@@ -8,6 +8,9 @@ class Collager extends Model
 {
 
     protected $table = 'collagers';
+    
+    protected $fillable = ['id','user_id','created_at','updated_at'];
+
     public $timestamps = true;
     protected $guarded = ['created_at', 'updated_at'];
 

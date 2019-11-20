@@ -10,6 +10,7 @@ class QuizCategory extends Model
     use SoftDeletes;
     //
     protected $table = 'quiz_categorys';
+
     public $timestamps = true;
     protected $guarded = ['created_at', 'updated_at'];
     protected $dates = ['deleted_at'];

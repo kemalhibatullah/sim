@@ -54,6 +54,12 @@
 
     </div>
 
+    <div class="thumbnail">
+        <div style="margin-left : 10px; margin-top : 10px; margin-bottom : 10px;">
+                <a class="btn btn-warning" href="/quiz_categorys/export_excel">Export Data</a>
+        </div>
+    </div>
+
     <div class="panel panel-flat">
         <div class="panel-heading">
             <h6 class="panel-title">Basic line chart</h6>
@@ -124,7 +130,7 @@
 
                         $.each(data, function(key, value) {
 
-                            
+
                             $('select[name="quiz-type"]').append('<option value="' + value['id'] + '">' + value['Name'] + '</option>');
                         });
                     },

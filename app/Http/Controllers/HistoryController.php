@@ -25,11 +25,18 @@ class HistoryController extends Controller
     public function getData()
     {
         $data = User::role('user')->get()->sortBy('name');
-        return datatables()->of($data)->addColumn('action', function ($row) {
+        return datatables()->of($data)
+        ->addColumn('action', function ($row) 
+        {
             $btn = '<a id="btn-detail" href="' . route('history.show', $row->id) . '" class="btn border-info btn-xs text-info-600 btn-flat btn-icon"><i class="icon-eye"></i></a>';
             return $btn;
         })
-            ->rawColumns(['action'])
+        ->addColumn('check', function () 
+        {
+            $check = '<input type="checkbox">';
+            return $check;
+        })
+            ->rawColumns(['action','check'])
             ->make(true);
     }
 
@@ -42,6 +49,32 @@ class HistoryController extends Controller
             return $btn;
         })
             ->rawColumns(['action'])
+            ->addColumn('category', function ($row) {
+                return $row->quiz->quizType->quizCategory->name;
+            })
+            ->addColumn('type', function ($row) {
+                return $row->quiz->quizType->name;
+            })
+            ->addColumn('title', function ($row) {
+                return $row->quiz->title;
+            })
+            ->addColumn('date', function ($row) {
+                return $row->created_at->format('j F Y');;
+            })
+            ->addColumn('score', function ($row) {
+                return $row->total_score;
+            })
+            ->make(true);
+    }
+
+    public function getDataHistoryUsers()
+    {
+        $data = QuizCollager::where('collager_id', 1)->get();
+        //return $data;
+        return datatables()->of($data)
+            ->addColumn('name', function ($row) {
+                return $row->user['name'];
+            })
             ->addColumn('category', function ($row) {
                 return $row->quiz->quizType->quizCategory->name;
             })
@@ -92,7 +125,7 @@ class HistoryController extends Controller
         $datak = Quiz::select('id', 'quiz_type_id', 'title')->get()->sortBy('quiz_type_id');
         $dataj = QuizCategory::select('id', 'name')->get()->sortBy('id');
         $datah = QuizType::select('id', 'quiz_category_id', 'name')->get()->sortBy('quiz_category_id');
-    
+
 
         $datas = QuizCategory::select('id', 'name')->get()->sortBy('id');
 

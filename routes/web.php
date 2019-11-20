@@ -69,6 +69,7 @@ Auth::routes();
      Route::get('/data-quiz-type', 'QuizTypeController@getData');
      Route::get('/data-history', 'HistoryController@getData');
      Route::get('/data-history-user/{id}', 'HistoryController@getDataHistoryUser');
+     Route::get('/data-history-users/', 'HistoryController@getDataHistoryUsers');
      Route::get('/data-history-chart/{id}', 'HistoryController@getDataChartUser');
      Route::get('/data-history-chart-id/{id}/{id2}', 'HistoryController@getDataChartUserId');
      Route::get('/data-quiz-category', 'QuizCategoryController@getData');
@@ -115,5 +116,8 @@ Route::get('/storage/user/{id}', 'UserController@picture')->name('user.picture')
   Route::get('/storage/question/{id}', 'QuestionController@picture')->name('question.picture');
   Route::get('/storage/answer/{id}', 'AnswerController@picture')->name('answer.picture');
   Route::get('/storage/banner/{id}', 'BannerController@picture')->name('banner.picture');
+
+  Route::get('/quiz_categorys', 'PostsController@index');
+  Route::get('/quiz_categorys/export_excel', 'PostsController@export_excel');
 
   
