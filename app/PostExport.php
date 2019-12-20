@@ -24,6 +24,7 @@ class PostExport implements FromCollection
                     ->join('quiz_types', 'quiz_types.id', '=', 'quizs.quiz_type_id')
                     ->join('quiz_categorys', 'quiz_categorys.id', '=', 'quiz_types.quiz_category_id')
                     ->select('users.name', 'quizs.title', 'quiz_collagers.total_score')
+                    // ->where('users.id', 1)
                     ->get();
         return $data;
             // ->addColumn('name', function ($row) {

@@ -20,7 +20,7 @@ class PostsController extends Controller
 
 	public function export_excel()
 	{
-		return Excel::download(new PostExport, 'col.xlsx');
+		return Excel::download(new PostExport, 'Data User.xlsx');
 	}
    
 }

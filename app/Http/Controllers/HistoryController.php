@@ -9,6 +9,7 @@ use App\QuizCategory;
 use App\Quiz;
 use App\QuizType;
 use DataTables;
+use DB;
 
 class HistoryController extends Controller
 {
@@ -19,7 +20,12 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        return view('history.index');
+        $data = User::role('user')->get()->sortBy('name');
+        // dd($data);
+        $data2 = Quiz::select('id', 'quiz_type_id', 'title')->get()->sortBy('quiz_type_id');
+        // dd($data);
+        
+        return view('history.index',compact('data', 'data2'));
     }
 
     public function getData()
@@ -31,12 +37,12 @@ class HistoryController extends Controller
             $btn = '<a id="btn-detail" href="' . route('history.show', $row->id) . '" class="btn border-info btn-xs text-info-600 btn-flat btn-icon"><i class="icon-eye"></i></a>';
             return $btn;
         })
-        ->addColumn('check', function () 
+        ->addColumn('check', function ($row) 
         {
-            $check = '<input type="checkbox">';
+            $check = '<input type="checkbox" name="' . ($row->id) . '" class="kemi">';
             return $check;
         })
-            ->rawColumns(['action','check'])
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -49,6 +55,9 @@ class HistoryController extends Controller
             return $btn;
         })
             ->rawColumns(['action'])
+            ->addColumn('name', function ($row) {
+                return $row->user->name;
+            })
             ->addColumn('category', function ($row) {
                 return $row->quiz->quizType->quizCategory->name;
             })
@@ -128,6 +137,18 @@ class HistoryController extends Controller
 
 
         $datas = QuizCategory::select('id', 'name')->get()->sortBy('id');
+
+        
+        // $datal =  DB::table('quiz_collagers')
+        //             ->join('collagers', 'collagers.id', '=', 'quiz_collagers.collager_id')
+        //             ->join('users', 'users.id', '=', 'quiz_collagers.collager_id')
+        //             ->join('quizs', 'quizs.id', '=', 'quiz_collagers.quiz_id')
+        //             ->join('quiz_types', 'quiz_types.id', '=', 'quizs.quiz_type_id')
+        //             ->join('quiz_categorys', 'quiz_categorys.id', '=', 'quiz_types.quiz_category_id')
+        //             ->select('users.name', 'quizs.title', 'quiz_collagers.total_score')
+        //             ->where('users.id', $id)
+        //             ->get();
+                    // dd($datal);
 
         $data = User::find($id);
         return view('history.history-user', compact('data', 'datas', 'datak', 'dataj', 'datah'));

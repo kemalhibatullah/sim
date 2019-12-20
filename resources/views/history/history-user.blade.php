@@ -31,6 +31,7 @@
     <!-- /user thumbnail -->
 
     <div class="thumbnail">
+        <h6 class="panel-title" style="margin-left: 10px; margin-top: 20px;">Chart filter</h6>
         <div class="btn-group" style="margin-left: 10px;">
             <select name="category" class="form-control">
                 <option>-- Quiz Category --</option>
@@ -49,15 +50,12 @@
                 <option>-- Quiz --</option>
             </select>
         </div>
+        <div class="btn-group" style="margin-left: 20px; margin-top: 20px; margin-bottom: 20px;">
+            <button class="btn btn-primary" id="semua" name="semua">Lihat Semua</button>
+        </div>
 
         <!-- Chained -->
 
-    </div>
-
-    <div class="thumbnail">
-        <div style="margin-left : 10px; margin-top : 10px; margin-bottom : 10px;">
-                <a class="btn btn-warning" href="/quiz_categorys/export_excel">Export Data</a>
-        </div>
     </div>
 
     <div class="panel panel-flat">
@@ -79,12 +77,14 @@
         </div>
     </div>
 
+
     <div class="panel panel-flat">
         <div style="padding:20px">
             <table class="table" id="table-history-user" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Name</th>
                         <th>Category</th>
                         <th>Type</th>
                         <th>Title Quiz</th>
@@ -104,6 +104,19 @@
 @push('after_script')
 <script type="text/javascript" src="{{asset('js/plugins/visualization/d3/d3.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/plugins/visualization/c3/c3.min.js')}}"></script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+
 <script>
 
 </script>
@@ -217,6 +230,44 @@
 
         });
 
+        $("button").click(function(e) {
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('table/data-history-chart') }}" + "/" + "{{$data->id}}",
+                success: function(data) {
+                    //alert(data.success);
+                    var chart_line_regions = c3.generate({
+                        bindto: '#c3-line-regions-chart',
+                        size: {
+                            height: 500
+                        },
+                        point: {
+                            r: 4
+                        },
+                        data: {
+                            // x: 'x',
+                            columns: data,
+                        },
+                        grid: {
+                            y: {
+                                show: true
+                            }
+                        },
+                        axis: {
+                            x: {
+                                label: 'Quiz ke-',
+                                start: 1
+                            },
+                            y: {
+                                label: 'Total score'
+                            },
+                        }
+                    });
+                }
+            });
+        });
+
+
         history_user = $('#table-history-user').DataTable({
 
             order: [
@@ -238,6 +289,11 @@
                     data: 'id',
                     name: 'id',
                     visible: false
+                },
+                {
+                    data: 'name',
+                    name: 'name',
+                    visible: true
                 },
                 {
                     data: 'category',
@@ -270,6 +326,17 @@
                     visible: true
                 },
             ],
+
+
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    "extend": 'excel',
+                    "text": 'Export Data',
+                    "className": 'btn btn-primary'
+                }
+            ],
+            select: true
         });
 
 
